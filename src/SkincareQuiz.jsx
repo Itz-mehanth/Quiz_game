@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import "./SkincareQuiz.css";
+import "./SSkincareQuiz.css";
 import startSound from "./sounds/start.mp3";
 import countdownSound from "./sounds/countdown.wav";
 import correctSound from "./sounds/correct.wav";
