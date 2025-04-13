@@ -171,7 +171,7 @@ const SkincareQuiz = () => {
         <div className="countdown">{countdown}</div>
       ) : showScore ? (
         <div className="results-screen">
-          <h2 >Quiz Completed!</h2>
+          <h2 className="quiz-completed">Quiz Completed!</h2>
           <table className="results-table">
             <tbody>
               <tr><td>Score:</td> <td>{score} / {questions.length}</td></tr>

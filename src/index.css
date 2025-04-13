@@ -519,3 +519,7 @@ button:focus-visible {
   cursor: pointer;
   font-size: 18px;
 }
+
+.quiz-completed{
+  color: black;
+}
