@@ -127,7 +127,7 @@ const SkincareQuiz = () => {
       const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
       return () => clearTimeout(timer);
     } else if (countdown === 0) {
-      setQuizTimer(30); // Start quiz timer
+      setQuizTimer(90); // Start quiz timer
     }
   }, [gameStarted, countdown]);
 
@@ -182,7 +182,7 @@ const SkincareQuiz = () => {
     setScore(0);
     setCoins(0);
     setShowScore(false);
-    setQuizTimer(30);
+    setQuizTimer(90);
   };
 
   return (
@@ -225,7 +225,7 @@ const SkincareQuiz = () => {
                 cx="30" cy="30" r="25" 
                 stroke="#2ed573" strokeWidth="5" fill="none"
                 strokeDasharray="157"
-                strokeDashoffset={(quizTimer / 30) * 157}
+                strokeDashoffset={(quizTimer / 90) * 157}
                 transform="rotate(-90 30 30)"
               />
             </svg>
