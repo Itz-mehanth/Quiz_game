@@ -74,6 +74,7 @@ const questions = [
 ];
 
 const SkincareQuiz = () => {
+  const [loading, setLoading] = useState(true); // splash screen
   const [gameStarted, setGameStarted] = useState(false);
   const [countdown, setCountdown] = useState(3);
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -85,27 +86,48 @@ const SkincareQuiz = () => {
   const [coins, setCoins] = useState(0);
   const [musicOn, setMusicOn] = useState(false);
 
-  // Audio refs for fast access
   const musicRef = useRef(new Audio(startSound));
   const correctRef = useRef(null);
   const wrongRef = useRef(null);
   const endRef = useRef(null);
   const countdownRef = useRef(null);
 
-  // Preload sounds
+  // Preload sounds and show splash screen
   useEffect(() => {
-    correctRef.current = new Audio(correctSound);
-    wrongRef.current = new Audio(wrongSound);
-    endRef.current = new Audio(endSound);
-    countdownRef.current = new Audio(countdownSound);
+    const correct = new Audio(correctSound);
+    const wrong = new Audio(wrongSound);
+    const end = new Audio(endSound);
+    const countdown = new Audio(countdownSound);
 
-    // Prime them by briefly playing and pausing
-    [correctRef, wrongRef, endRef, countdownRef].forEach(ref => {
-      ref.current.volume = 0;
-      ref.current.play().catch(() => {});
-      ref.current.pause();
-      ref.current.currentTime = 0;
-      ref.current.volume = 1;
+    correct.volume = 0;
+    wrong.volume = 0;
+    end.volume = 0;
+    countdown.volume = 0;
+
+    Promise.all([
+      correct.play().catch(() => {}),
+      wrong.play().catch(() => {}),
+      end.play().catch(() => {}),
+      countdown.play().catch(() => {}),
+    ]).then(() => {
+      correct.pause(); wrong.pause(); end.pause(); countdown.pause();
+      correct.currentTime = 0; wrong.currentTime = 0; end.currentTime = 0; countdown.currentTime = 0;
+      correct.volume = 1; wrong.volume = 1; end.volume = 1; countdown.volume = 1;
+      correctRef.current = correct;
+      wrongRef.current = wrong;
+      endRef.current = end;
+      countdownRef.current = countdown;
+
+      // Play background music during splash screen
+      musicRef.current.volume = 0.6;
+      musicRef.current.loop = true;
+      musicRef.current.play().catch(() => {});
+
+      setTimeout(() => {
+        setLoading(false);
+        musicRef.current.pause();
+        musicRef.current.currentTime = 0;
+      }, 2500); // splash duration
     });
   }, []);
 
@@ -127,7 +149,7 @@ const SkincareQuiz = () => {
       const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
       return () => clearTimeout(timer);
     } else if (countdown === 0) {
-      setQuizTimer(90); // Start quiz timer
+      setQuizTimer(90);
     }
   }, [gameStarted, countdown]);
 
@@ -185,6 +207,15 @@ const SkincareQuiz = () => {
     setQuizTimer(90);
   };
 
+  // Splash screen while loading
+  if (loading) {
+    return (
+      <div className="splash-screen">
+        <h1>🌿 Welcome to the Skincare Quiz 🌟</h1>
+      </div>
+    );
+  }
+
   return (
     <div className="quiz-container">
       {!gameStarted ? (
@@ -217,7 +248,6 @@ const SkincareQuiz = () => {
         </div>
       ) : (
         <div className="quiz-card">
-          {/* Circular Timer */}
           <div className="circular-timer">
             <svg width="60" height="60">
               <circle cx="30" cy="30" r="25" stroke="#ff4757" strokeWidth="5" fill="none" />
@@ -231,7 +261,6 @@ const SkincareQuiz = () => {
             </svg>
           </div>
 
-          {/* Progress Bar */}
           <div className="progress-bar-container">
             <div 
               className="progress-bar" 
